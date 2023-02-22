@@ -2,6 +2,8 @@
 Main script.
 """
 from data import Vault, VaultItem, User
+import pickle
+import os
 
 
 class MainApp:
@@ -15,7 +17,27 @@ class MainApp:
         """
         Constructor
         """
-        self.users: dict[User, Vault] = {}
+        self.users: dict[User, Vault] = (
+            self.load() if os.path.exists("data.dat") else {}
+        )
+
+    def save(self) -> None:
+        """
+        Save data
+        """
+        with open("data.dat", "bw") as file:
+            pickle.dump(self.users, file)
+
+    @staticmethod
+    def load() -> dict[User, Vault]:
+        """
+        load data
+
+        Returns:
+            dict with user and associated vault
+        """
+        with open("data.dat", "br") as file:
+            return pickle.load(file)
 
     @staticmethod
     def ask(prompt: str) -> int:
@@ -244,6 +266,7 @@ class MainApp:
             choice = self.ask("Votre choix: ")
             match choice:
                 case 0:
+                    self.save()
                     exit()
                 case 1:
                     self.do_login()

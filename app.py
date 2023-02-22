@@ -1,17 +1,17 @@
 """
-TODO
+Main script.
 """
 
 
 def ask(prompt: str) -> int:
     """
-    TODO
+    Ask the user to input an integer value based on a given prompt.
 
     Args:
-        prompt (str): _description_
+        prompt (str): The prompt displayed to the user.
 
     Returns:
-        int: _description_
+        int: The integer value entered by the user.
     """
     choice: str = ""
     while not choice.isdigit():
@@ -21,7 +21,7 @@ def ask(prompt: str) -> int:
 
 def list_elements():
     """
-    TODO
+    List all the elements stored in the active vault
     """
     for element in active_vault:
         print(element)
@@ -29,7 +29,7 @@ def list_elements():
 
 def show_details():
     """
-    TODO
+    Display the login and password of a given element from the active vault.
     """
     element_name = input("Entrez le nom d’un élément: ")
     if element_name in active_vault:
@@ -41,7 +41,7 @@ def show_details():
 
 def add_element():
     """
-    TODO
+    Add a new element to the active vault.
     """
     element_name = input("Entrez le nom de l’élément: ")
     if element_name not in active_vault:
@@ -55,7 +55,7 @@ def add_element():
 
 def edit_element():
     """
-    TODO
+    Edit the name, login or password of a given element in the active vault.
     """
     element_name = input("Entrez le nom de l’élément: ")
     if element_name in active_vault:
@@ -79,7 +79,7 @@ def edit_element():
 
 def remove_element():
     """
-    TODO
+    Remove an element from the active vault.
     """
     element_name = input("Entrez le nom de l’élément: ")
     if element_name in active_vault:
@@ -90,7 +90,7 @@ def remove_element():
 
 def search_by_name():
     """
-    TODO
+    Search for an element in the active vault by its name.
     """
     query = input("Entrez le début du nom de l’élément: ")
     for element in active_vault:
@@ -100,7 +100,7 @@ def search_by_name():
 
 def vault_menu():
     """
-    TODO
+    Display the menu of the active vault and handle user’s choices.
     """
     while choice := -1 != 0:
         print("Votre coffre-fort".center(100, "#"))
@@ -140,7 +140,9 @@ def vault_menu():
 
 def do_login():
     """
-    TODO
+    Prompts the user for a username and checks if it exists in the vault.
+    If the username is found, sets the active vault to that user and displays the vault menu.
+    If the username is not found, prompts the user to register.
     """
     user_name = input("Entrez un nom d’utilisateur: ")
     if user_name in vault:
@@ -153,7 +155,8 @@ def do_login():
 
 def create_user():
     """
-    TODO
+    Prompts the user for a username and creates a new user in the vault if it does not already exist.
+    If the username already exists, prompts the user to log in or choose a different username.
     """
     user_name = input("Entrez un nom d’utilisateur: ")
     if user_name not in vault:
@@ -166,7 +169,8 @@ def create_user():
 
 def remove_user():
     """
-    TODO
+    Prompts the user for a username and removes that user from the vault if it exists.
+    If the username does not exist, prints a message stating that it does not exist.
     """
     user_name = input("Entrez un nom d’utilisateur: ")
     if user_name in vault:
@@ -177,7 +181,12 @@ def remove_user():
 
 def show_main_menu():
     """
-    TODO
+    Displays the main menu and prompts the user to make a selection.
+    If the user selects 0, exits the program.
+    If the user selects 1, calls the do_login() function.
+    If the user selects 2, calls the create_user() function.
+    If the user selects 3, calls the remove_user() function.
+    If the user selects any other number, prints a message stating that the choice is invalid and prompts the user to try again.ODO
     """
     while choice := -1 != 0:
         print("PASSMAN - PASSword MANager".center(100, "#"))

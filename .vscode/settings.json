@@ -8,5 +8,8 @@
   "files.autoSave": "afterDelay",
   "pythonTestExplorer.testFramework": "pytest",
   "python.formatting.blackPath": "black",
-  "python.languageServer": "Pylance"
+  "python.languageServer": "Pylance",
+  "autoDocstring.docstringFormat": "pep257",
+  "autoDocstring.startOnNewLine": true,
+  "python.analysis.typeCheckingMode": "basic"
 }

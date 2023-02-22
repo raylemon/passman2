@@ -1,0 +1,12 @@
+{
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}\\__pypackages__\\3.11\\lib"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}\\__pypackages__\\3.11\\lib"
+  ],
+  "files.autoSave": "afterDelay",
+  "pythonTestExplorer.testFramework": "pytest",
+  "python.formatting.blackPath": "black",
+  "python.languageServer": "Pylance"
+}

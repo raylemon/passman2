@@ -1,6 +1,7 @@
 """
 Data classes
 """
+from hashlib import sha512
 
 
 class VaultItem:
@@ -136,7 +137,7 @@ class User:
             password -- password of user
         """
         self.login = login
-        self.password = password
+        self.password = sha512(password.encode("utf-8")).hexdigest()
 
     def verify_password(self, password: str) -> bool:
         """
@@ -148,7 +149,7 @@ class User:
         Returns:
             True if the given password matches the user's password, False otherwise.
         """
-        return password == self.password
+        return sha512(password.encode("utf-8")).hexdigest() == self.password
 
     def __str__(self) -> str:
         """

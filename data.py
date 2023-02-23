@@ -108,7 +108,7 @@ class Vault:
         for element, item in self.elements.items():
             if element.startswith(search_string):
                 els.append(item)
-        return sorted(els)
+        return sorted(els, key= lambda it: it.name)
 
     def element_exists(self, name: str) -> bool:
         """

@@ -86,7 +86,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:c04cd0df26e1ec28eafd56d50549cd7d7f513e35b3ff7fa5c49bf0e8f8b86a33"
+content_hash = "sha256:cdf83493dba85daa770687ab00fb218729beeeb1d60df97c0fdf56bbd639ed56"
 
 [metadata.files]
 "attrs 22.2.0" = [

@@ -2,6 +2,18 @@
 Data classes
 """
 from hashlib import sha512
+import pickle
+import os
+from typing import Optional
+
+
+class DuplicateError(Exception):
+    """
+    Duplicate Error
+    """
+
+    def __init__(self, message: str = "") -> None:
+        super().__init__(message)
 
 
 class VaultItem:
@@ -56,8 +68,8 @@ class Vault:
         """
         if element_name in self.elements:
             return self.elements[element_name]
-        else:
-            pass  # TODO error
+
+        raise KeyError(f"{element_name} not found")
 
     def add_element(self, item: VaultItem) -> None:
         """
@@ -68,8 +80,7 @@ class Vault:
         """
         if item.name not in self.elements:
             self.elements[item.name] = item
-        else:
-            pass  #  TODO error
+        raise DuplicateError(f"{item} already exists")
 
     def edit_element(self, old_item: VaultItem, new_item: VaultItem) -> None:
         """
@@ -91,8 +102,7 @@ class Vault:
         """
         if item.name in self.elements:
             del self.elements[item.name]
-        else:
-            pass  # TODO error
+        raise KeyError(f"{item} not found")
 
     def search_by_name(self, search_string: str) -> list[VaultItem]:
         """
@@ -108,7 +118,7 @@ class Vault:
         for element, item in self.elements.items():
             if element.startswith(search_string):
                 els.append(item)
-        return sorted(els, key= lambda it: it.name)
+        return sorted(els, key=lambda it: it.name)
 
     def element_exists(self, name: str) -> bool:
         """
@@ -168,3 +178,46 @@ class User:
             A hash value computed from the user's login.
         """
         return hash(self.login)
+
+
+class UserStorage:
+    users: dict[User, Vault]
+
+    def load(self, filename: str) -> None:
+        if os.path.exists(filename):
+            with open(filename, "br") as file:
+                self.users = pickle.load(file)
+        else:
+            self.users = {}
+
+    def save(self, filename: str) -> None:
+        with open(filename, "wb") as file:
+            pickle.dump(self.users, file)
+
+    def get_user(self, username: str) -> Optional[User]:
+        for user in self.users:
+            if user.login == username:
+                return user
+
+        return None
+
+    def remove_user(self, username: str, userpass: str) -> bool:
+        user = self.get_user(username)
+        if user is not None and user.verify_password(userpass):
+            del self.users[user]
+            return True
+        else:
+            return False
+
+    def create_user(self, username: str, userpass: str) -> bool:
+        if (user := self.get_user(username)) is not None:
+            self.users[user] = Vault()
+            return True
+        else:
+            return False
+
+    def get_vault(self, user: User) -> Vault:
+        if user is not None:
+            return self.users[user]
+        raise KeyError(f"{user} not found")
+

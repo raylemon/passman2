@@ -3,7 +3,7 @@ Testing classes
 """
 from hashlib import sha512
 import pytest
-from data import User, Vault, VaultItem
+from model.data import User, Vault, VaultItem
 
 
 class TestUser:

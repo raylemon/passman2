@@ -1,7 +1,7 @@
 """
 Main script.
 """
-from data import Vault, VaultItem, User
+from model.data import Vault, VaultItem, User
 import pickle
 import os
 

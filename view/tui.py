@@ -1,20 +1,48 @@
+"""
+    Terminal User Interface
+"""
 import colorama
 from colorama import Fore, Style
 
 
 class Tui:
+    """
+    Terminal User Interface
+    """
+
     def __init__(self) -> None:
+        """
+        Constructor. Initializes colorama
+        """
         colorama.init(autoreset=True)
 
     @staticmethod
     def print_message(message: str) -> None:
+        """
+        Print a message to screen
+
+        Arguments:
+            message -- Message to print
+        """
         print(message)
 
     @staticmethod
     def print_error(message: str) -> None:
+        """
+        Print error message to screen
+
+        Arguments:
+            message -- message to print. Appears in RED
+        """
         print(Fore.RED + message)  # type: ignore
 
     def show_main_menu(self) -> int:
+        """
+        Show main menu
+
+        Returns:
+            A number between 0 and 3
+        """
         print(Style.BRIGHT + "PASSMAN - PASSword MANager".center(100, "#"))  # type: ignore
 
         print(
@@ -33,6 +61,12 @@ class Tui:
         return int(choice)
 
     def show_vault_menu(self) -> int:
+        """
+        Show vault menu
+
+        Returns:
+            A number between 0 and 6
+        """
         print(Style.BRIGHT + "Votre coffre-fort".center(100, "#"))  # type: ignore
 
         print(
@@ -62,6 +96,18 @@ class Tui:
 
     @staticmethod
     def ask(prompt: str, default: str = "") -> str:
+        """
+        Ask user
+
+        Arguments:
+            prompt -- Message to print
+
+        Keyword Arguments:
+            default -- default value (default: {""})
+
+        Returns:
+            Answer or default value
+        """
         if default != "":
             return input(f"{prompt} ({default}): ")
         else:

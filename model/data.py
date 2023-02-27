@@ -48,11 +48,10 @@ class Vault:
 
     def list_elements(self) -> list[str]:
         """
-                Returns a sorted list of the names of all elements stored in the vault.
-        ODO
+        Returns a sorted list of the names of all elements stored in the vault.
 
-                Returns:
-                    Returns a sorted list of the names of all elements stored in the vault. description
+        Returns:
+            Returns a sorted list of the names of all elements stored in the vault. description
         """
         return sorted(self.elements.keys())
 

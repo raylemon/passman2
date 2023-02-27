@@ -181,9 +181,25 @@ class User:
 
 
 class UserStorage:
+    """
+    User Storage
+
+    Raises:
+        KeyError: Error when User not exists
+
+    Returns:
+        Storage class
+    """
+
     users: dict[User, Vault]
 
     def load(self, filename: str) -> None:
+        """
+        Load data
+
+        Arguments:
+            filename -- file path
+        """
         if os.path.exists(filename):
             with open(filename, "br") as file:
                 self.users = pickle.load(file)
@@ -191,10 +207,25 @@ class UserStorage:
             self.users = {}
 
     def save(self, filename: str) -> None:
+        """
+        Save data to file
+
+        Arguments:
+            filename -- file path
+        """
         with open(filename, "wb") as file:
             pickle.dump(self.users, file)
 
     def get_user(self, username: str) -> Optional[User]:
+        """
+        Get user from data
+
+        Arguments:
+            username -- User name to find
+
+        Returns:
+            an User
+        """
         for user in self.users:
             if user.login == username:
                 return user
@@ -202,6 +233,16 @@ class UserStorage:
         return None
 
     def remove_user(self, username: str, userpass: str) -> bool:
+        """
+        Remove user from data
+
+        Arguments:
+            username -- user’s name
+            userpass -- user’s password
+
+        Returns:
+            True if success, False elsewhere
+        """
         user = self.get_user(username)
         if user is not None and user.verify_password(userpass):
             del self.users[user]
@@ -210,6 +251,16 @@ class UserStorage:
             return False
 
     def create_user(self, username: str, userpass: str) -> bool:
+        """
+        Create user and his associated vault
+
+        Arguments:
+            username -- user’s name
+            userpass -- user’s password
+
+        Returns:
+            True if User is successfully created, False elsewhere
+        """
         if (user := self.get_user(username)) is not None:
             self.users[user] = Vault()
             return True
@@ -217,7 +268,18 @@ class UserStorage:
             return False
 
     def get_vault(self, user: User) -> Vault:
+        """
+        Get associated vault
+
+        Arguments:
+            user -- User associated to vault
+
+        Raises:
+            KeyError: if user not exists
+
+        Returns:
+            Vault associated to User
+        """
         if user is not None:
             return self.users[user]
         raise KeyError(f"{user} not found")
-

@@ -62,6 +62,9 @@ class Vault:
         Arguments:
             element_name -- name of the VaultItem to retrieve
 
+        Raises:
+            KeyError: if item does’nt exists
+
         Returns:
             The VaultItem with the given name, if it exists in the vault.
         """
@@ -76,6 +79,9 @@ class Vault:
 
         Arguments:
             item -- The VaultItem to add to the vault.
+
+        Raises:
+            DuplicateError: if item already exists
         """
         if item.name not in self.elements:
             self.elements[item.name] = item
@@ -88,6 +94,9 @@ class Vault:
         Arguments:
             old_item -- The VaultItem to be replaced.
             new_item -- The VaultItem to replace it with.
+
+        Raises:
+            KeyError: if item are not found
         """
         self.remove_element(old_item)
         self.add_element(new_item)

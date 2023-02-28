@@ -5,10 +5,12 @@ TUI controller
 from model.data import DuplicateError, Vault, VaultItem, UserStorage
 from view.tui import Tui
 
+
 class TuiController:
     """
     TUI Controller
     """
+
     view: Tui
     storage: UserStorage
     vault: Vault
@@ -30,7 +32,7 @@ class TuiController:
             storage -- User storage
         """
         self.storage = storage
-    
+
     def start(self) -> None:
         """
         Start
@@ -47,7 +49,7 @@ class TuiController:
                     self.remove_user()
                 case _:
                     self.view.print_error("Choix invalide. Veuillez réessayer.")
-    
+
     def login(self) -> None:
         """
         Log user
@@ -63,7 +65,7 @@ class TuiController:
                     self.view.print_error("L’utilisateur n’existe pas.")
         else:
             self.view.print_error("L’utilisateur n’existe pas.")
-    
+
     def create_user(self) -> None:
         """
         Create user
@@ -73,24 +75,26 @@ class TuiController:
             user_password = self.view.ask("Entrez votre mot de passe: ")
             user_confirm = self.view.ask("Confirmez votre mot de passe: ")
             if user_password == user_confirm:
-                if self.storage.create_user(user_name,user_password):
+                if self.storage.create_user(user_name, user_password):
                     self.view.print_message("Utilisateur créé avec succès.")
                 else:
-                    self.view.print_error("L’utilisateur existe déjà. Veuillez réessayer.")
+                    self.view.print_error(
+                        "L’utilisateur existe déjà. Veuillez réessayer."
+                    )
         else:
             self.view.print_error("L’utilisateur existe déjà. Veuillez réessayer.")
-    
+
     def remove_user(self) -> None:
         """
         Remove a user
         """
         user_name = self.view.ask("Entrez un nom d’utilisateur: ")
         user_pass = self.view.ask("Entrez votre mot de passe: ")
-        if self.storage.remove_user(user_name,user_pass):
+        if self.storage.remove_user(user_name, user_pass):
             self.view.print_message("Utilisateur supprimé avec succès.")
         else:
             self.view.print_error("Nom d’utilisateur inexistant.")
-    
+
     def vault_menu(self) -> None:
         """
         Vault menu
@@ -120,18 +124,20 @@ class TuiController:
         """
         for element in self.vault.list_elements():
             self.view.print_message(element)
-    
+
     def show_details(self) -> None:
         """
         Show element’s details
         """
         element_name = self.view.ask("Entrez le nom d’un élément: ")
         try:
-            element = self.vault.get_element(element_name):
-            self.view.print_message(f"login: {element.login}, password: {element.password}")
+            element = self.vault.get_element(element_name)
+            self.view.print_message(
+                f"login: {element.login}, password: {element.password}"
+            )
         except KeyError:
             self.view.print_error("Pas d’élément à ce nom. Veuillez réessayer.")
-    
+
     def add_element(self) -> None:
         """
         Add an element in vault
@@ -141,11 +147,11 @@ class TuiController:
             element_login = self.view.ask("Entrez le login de l’élément: ")
             element_password = self.view.ask("Entrez le mot de passe de l’élément: ")
 
-            v_item = VaultItem(element_name,element_login,element_password)
+            v_item = VaultItem(element_name, element_login, element_password)
             self.vault.add_element(v_item)
         except DuplicateError:
             self.view.print_error("L’élément existe déjà. Veuillez réessayer.")
-    
+
     def edit_element(self) -> None:
         """
         Edit an element
@@ -153,19 +159,30 @@ class TuiController:
         element_name = self.view.ask("Entrez le nom d’un élément: ")
         try:
             old_item = self.vault.get_element(element_name)
-            
-            new_element_name = self.view.ask("Entrez le nouveau nom de l’élément ou laissez vide pour le conserver.", old_item.name)
 
-            new_element_login = self.view.ask("Entrez le nouveau login de l’élément ou laissez vide pour le conserver", old_item.login)
+            new_element_name = self.view.ask(
+                "Entrez le nouveau nom de l’élément ou laissez vide pour le conserver.",
+                old_item.name,
+            )
 
-            new_element_password = self.view.ask("Entrez le nouveau mot de passe de l’élément ou laissez vide pour le conserver", old_item.password)
-            
-            new_item = VaultItem(new_element_name,new_element_login,new_element_password)
+            new_element_login = self.view.ask(
+                "Entrez le nouveau login de l’élément ou laissez vide pour le conserver",
+                old_item.login,
+            )
 
-            self.vault.edit_element(old_item,new_item)
+            new_element_password = self.view.ask(
+                "Entrez le nouveau mot de passe de l’élément ou laissez vide pour le conserver",
+                old_item.password,
+            )
+
+            new_item = VaultItem(
+                new_element_name, new_element_login, new_element_password
+            )
+
+            self.vault.edit_element(old_item, new_item)
         except KeyError:
             self.view.print_error("L’élément n’existe pas. Veuillez réessayer.")
-    
+
     def remove_element(self) -> None:
         """
         Remove an element
@@ -176,7 +193,7 @@ class TuiController:
             self.vault.remove_element(v_item)
         except KeyError:
             self.view.print_error("L’élément n’existe pas. Veuillez réessayer.")
-    
+
     def search_by_name(self) -> None:
         """
         Search an element by it’s name

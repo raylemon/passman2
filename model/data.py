@@ -179,12 +179,6 @@ class User:
 class UserStorage:
     """
     User Storage
-
-    Raises:
-        KeyError: Error when User not exists
-
-    Returns:
-        Storage class
     """
 
     users: dict[User, Vault]

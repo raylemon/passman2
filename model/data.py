@@ -128,18 +128,6 @@ class Vault:
                 els.append(item)
         return sorted(els, key=lambda it: it.name)
 
-    def element_exists(self, name: str) -> bool:
-        """
-        Checks if a VaultItem with the given name exists in the vault.
-
-        Arguments:
-            name -- The name to check for in the vault.
-
-        Returns:
-            True if a VaultItem with the given name exists in the vault, False otherwise.
-        """
-        return name in self.elements
-
 
 class User:
     """

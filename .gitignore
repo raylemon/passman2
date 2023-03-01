@@ -1,5 +1,4 @@
 tests/__pycache__/*.pyc.*
-tests/__pycache__/test_data.cpython-311-pytest-7.2.1.pyc
-tests/__pycache__/__init__.cpython-311.pyc
-model/__pycache__/__init__.cpython-311.pyc
-.gitignore
+test/__pycache__/*
+*/__pycache__/*
+*/__pycache__/*.pyc

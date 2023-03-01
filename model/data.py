@@ -251,11 +251,12 @@ class UserStorage:
         Returns:
             True if User is successfully created, False elsewhere
         """
-        if (user := self.get_user(username)) is not None:
+        if (user := self.get_user(username)) is None:
+            user = User(username, userpass)
             self.users[user] = Vault()
             return True
-        else:
-            return False
+
+        return False
 
     def get_vault(self, user: User) -> Vault:
         """

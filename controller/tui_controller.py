@@ -37,7 +37,7 @@ class TuiController:
         """
         Start
         """
-        while choice := self.view.show_main_menu() != 0:
+        while (choice := self.view.show_main_menu()) != 0:
             match choice:
                 case 0:
                     exit()
@@ -99,7 +99,7 @@ class TuiController:
         """
         Vault menu
         """
-        while choice := self.view.show_vault_menu() != 0:
+        while (choice := self.view.show_vault_menu()) != 0:
             match choice:
                 case 0:
                     return
@@ -124,6 +124,7 @@ class TuiController:
         """
         for element in self.vault.list_elements():
             self.view.print_message(element)
+        self.view.ask("Appuyez sur une touche pour continuer…")
 
     def show_details(self) -> None:
         """
@@ -149,6 +150,7 @@ class TuiController:
 
             v_item = VaultItem(element_name, element_login, element_password)
             self.vault.add_element(v_item)
+            self.view.print_message("Élément ajouté avec succès.")
         except DuplicateError:
             self.view.print_error("L’élément existe déjà. Veuillez réessayer.")
 

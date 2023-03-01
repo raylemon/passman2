@@ -85,7 +85,8 @@ class Vault:
         """
         if item.name not in self.elements:
             self.elements[item.name] = item
-        raise DuplicateError(f"{item} already exists")
+        else:
+            raise DuplicateError(f"{item} already exists")
 
     def edit_element(self, old_item: VaultItem, new_item: VaultItem) -> None:
         """

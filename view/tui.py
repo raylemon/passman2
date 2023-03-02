@@ -1,20 +1,44 @@
 """
     Terminal User Interface
 """
+from __future__ import annotations
 import colorama
 from colorama import Fore, Style
-
+#from controller.tui_controller import TuiController
+import controller.tui_controller as ctrl
 
 class Tui:
     """
     Terminal User Interface
     """
 
+    _controller: ctrl.TuiController
+
     def __init__(self) -> None:
         """
         Constructor. Initializes colorama
         """
         colorama.init(autoreset=True)
+
+    @property
+    def controller(self) -> ctrl.TuiController:
+        """
+        Getter - Get controller
+
+        Returns:
+            Tui Controller
+        """
+        return self._controller
+
+    @controller.setter
+    def controller(self, value: ctrl.TuiController) -> None:
+        """
+        Setter
+
+        Arguments:
+            value -- Controller
+        """
+        self._controller = value
 
     @staticmethod
     def print_message(message: str) -> None:
@@ -36,13 +60,14 @@ class Tui:
         """
         print(Fore.RED + message)  # type: ignore
 
-    def show_main_menu(self) -> int:
+    def show_main_menu(self) -> None:
         """
         Show main menu
 
         Returns:
             A number between 0 and 3
         """
+        colorama.ansi.clear_screen()
         print(Style.BRIGHT + "PASSMAN - PASSword MANager".center(100, "#"))  # type: ignore
 
         print(
@@ -55,18 +80,29 @@ class Tui:
                 """
         )
 
-        choice = ""
+        choice = self.ask("Votre choix: ")
         while not choice.isdigit() and choice not in ["0", "1", "2", "3"]:
+            match int(choice):
+                case 0:
+                    self.controller.exit()
+                case 1:
+                    self.login()
+                case 2:
+                    self.create_user()
+                case 3:
+                    self.remove_user()
+                case _:
+                    self.print_error("Choix invalide. Veuillez réessayer.")
             choice = self.ask("Votre choix: ")
-        return int(choice)
 
-    def show_vault_menu(self) -> int:
+    def show_vault_menu(self) -> None:
         """
         Show vault menu
 
         Returns:
             A number between 0 and 6
         """
+        colorama.ansi.clear_screen()
         print(Style.BRIGHT + "Votre coffre-fort".center(100, "#"))  # type: ignore
 
         print(
@@ -81,7 +117,7 @@ class Tui:
             \r0. Fermer le coffre-fort.
         """
         )
-        choice = ""
+        choice = self.ask("Votre choix: ")
         while not choice.isdigit() and choice not in [
             "0",
             "1",
@@ -91,8 +127,24 @@ class Tui:
             "5",
             "6",
         ]:
+            match int(choice):
+                case 0:
+                    return
+                case 1:
+                    self.controller.list_elements()
+                case 2:
+                    self.show_details()
+                case 3:
+                    self.add_element()
+                case 4:
+                    self.edit_element()
+                case 5:
+                    self.remove_element()
+                case 6:
+                    self.search_by_name()
+                case _:
+                    self.print_error("Choix invalide. Veuillez réessayer.")
             choice = self.ask("Votre choix: ")
-        return int(choice)
 
     @staticmethod
     def ask(prompt: str, default: str = "") -> str:
@@ -112,3 +164,79 @@ class Tui:
             return input(f"{prompt} ({default}): ")
         else:
             return input(prompt)
+
+    def login(self) -> None:
+        """
+        _summary_
+        """
+        user_name = self.ask("Entrez le nom d’utilisateur: ")
+        user_password = self.ask("Entrez votre mot de passe: ")
+        self.controller.login(user_name, user_password)
+
+    def create_user(self) -> None:
+        """
+        _summary_
+        """
+        user_name = self.ask("Entrez le nom d’utilisateur: ")
+        user_password = self.ask("Entrez votre mot de passe: ")
+        password_confirm = self.ask("Confirmez votre mot de passe: ")
+        if user_password == password_confirm:
+            self.controller.create_user(user_name, user_password)
+
+    def remove_user(self) -> None:
+        """
+        _summary_
+        """
+        user_name = self.ask("Entrez le nom d’utilisateur: ")
+        user_password = self.ask("Entrez votre mot de passe: ")
+        self.controller.remove_user(user_name, user_password)
+
+    def show_details(self) -> None:
+        """
+        _summary_
+        """
+        element_name = self.ask("Entrez le nom d’un élément: ")
+        self.controller.show_details(element_name)
+
+    def add_element(self) -> None:
+        """
+        _summary_
+        """
+        element_name = self.ask("Entrez le nom d’un élément: ")
+        element_login = self.ask("Entrez le login de l’élément: ")
+        element_password = self.ask("Entrez le mot de passe de l’élément: ")
+        self.controller.add_element(element_name, element_login, element_password)
+
+    def edit_element(self) -> None:
+        """
+        _summary_
+        """
+        element_name = self.ask("Entrez le nom d’un élément: ")
+        oen, oel, oep = self.controller.get_element(element_name)
+
+        nen = self.ask(
+            "Entrez le nouveau nom de l’élément ou laissez vide pour le conserver.", oen
+        )
+        nel = self.ask(
+            "Entrez le nouveau login de l’élément ou laissez vide pour le conserver.",
+            oel,
+        )
+        nep = self.ask(
+            "Entrez le nouveau nom de l’élément ou laissez vide pour le conserver.", oep
+        )
+
+        self.controller.edit_element(element_name, nen, nel, nep)
+
+    def remove_element(self) -> None:
+        """
+        _summary_
+        """
+        element_name = self.ask("Entrez le nom de l’élément: ")
+        self.controller.remove_element(element_name)
+
+    def search_by_name(self) -> None:
+        """
+        _summary_
+        """
+        query = self.ask("Entrez le début du nom de l’élément: ")
+        self.controller.search_by_name(query)

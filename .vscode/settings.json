@@ -19,5 +19,11 @@
     ".",
     "tests"
   ],
-  "vs-chatgpt.apikey": "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"
+  "vs-chatgpt.apikey": "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",
+  "cSpell.words": [
+    "columnspan",
+    "pady",
+    "textvariable",
+    "userpass"
+  ]
 }

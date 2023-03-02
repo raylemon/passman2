@@ -4,3 +4,4 @@ test/__pycache__/*
 */__pycache__/*.pyc
 data.dat
 model/__pycache__/data.cpython-311.pyc
+

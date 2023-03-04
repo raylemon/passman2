@@ -4,8 +4,10 @@
 from __future__ import annotations
 import colorama
 from colorama import Fore, Style
-#from controller.tui_controller import TuiController
+
+# from controller.tui_controller import TuiController
 import controller.tui_controller as ctrl
+
 
 class Tui:
     """
@@ -41,7 +43,7 @@ class Tui:
         self._controller = value
 
     @staticmethod
-    def print_message(message: str) -> None:
+    def show_message(message: str) -> None:
         """
         Print a message to screen
 
@@ -51,7 +53,7 @@ class Tui:
         print(message)
 
     @staticmethod
-    def print_error(message: str) -> None:
+    def show_error(message: str) -> None:
         """
         Print error message to screen
 
@@ -92,7 +94,7 @@ class Tui:
                 case 3:
                     self.remove_user()
                 case _:
-                    self.print_error("Choix invalide. Veuillez réessayer.")
+                    self.show_error("Choix invalide. Veuillez réessayer.")
             choice = self.ask("Votre choix: ")
 
     def show_vault_menu(self) -> None:
@@ -131,7 +133,7 @@ class Tui:
                 case 0:
                     return
                 case 1:
-                    self.controller.list_elements()
+                    self.list_elements()
                 case 2:
                     self.show_details()
                 case 3:
@@ -143,7 +145,7 @@ class Tui:
                 case 6:
                     self.search_by_name()
                 case _:
-                    self.print_error("Choix invalide. Veuillez réessayer.")
+                    self.show_error("Choix invalide. Veuillez réessayer.")
             choice = self.ask("Votre choix: ")
 
     @staticmethod
@@ -171,7 +173,8 @@ class Tui:
         """
         user_name = self.ask("Entrez le nom d’utilisateur: ")
         user_password = self.ask("Entrez votre mot de passe: ")
-        self.controller.login(user_name, user_password)
+        if self.controller.login(user_name, user_password):
+            self.show_vault_menu()
 
     def create_user(self) -> None:
         """
@@ -196,7 +199,8 @@ class Tui:
         _summary_
         """
         element_name = self.ask("Entrez le nom d’un élément: ")
-        self.controller.show_details(element_name)
+        _,login,password = self.controller.show_details(element_name)
+        self.show_message(f"Login: {login}, mot de passe: {password}")
 
     def add_element(self) -> None:
         """
@@ -231,7 +235,7 @@ class Tui:
         """
         _summary_
         """
-        element_name = self.ask("Entrez le nom de l’élément: ")
+        element_name = self.ask("Entrez le nom de l’élément: ")
         self.controller.remove_element(element_name)
 
     def search_by_name(self) -> None:
@@ -239,4 +243,13 @@ class Tui:
         _summary_
         """
         query = self.ask("Entrez le début du nom de l’élément: ")
-        self.controller.search_by_name(query)
+        for item in self.controller.search_by_name(query):
+            self.show_message(item)
+
+    def list_elements(self) -> None:
+        """
+        _summary_
+        """
+        for item in self.controller.list_elements():
+            self.show_message(item)
+        self.ask("Appuyez sur une touche pour continuer.")

@@ -15,6 +15,7 @@ if __name__ == "__main__":
 
     storage.load(F_NAME)
 
+    view.controller = controller
     controller.view = view
     controller.storage = storage
     controller.start()

@@ -5,7 +5,6 @@ from __future__ import annotations
 import colorama
 from colorama import Fore, Style
 
-# from controller.tui_controller import TuiController
 import controller.tui_controller as ctrl
 
 
@@ -65,25 +64,24 @@ class Tui:
     def show_main_menu(self) -> None:
         """
         Show main menu
-
-        Returns:
-            A number between 0 and 3
         """
-        colorama.ansi.clear_screen()
-        print(Style.BRIGHT + "PASSMAN - PASSword MANager".center(100, "#"))  # type: ignore
-
-        print(
-            """
-                \r1. Connexion.
-                \r2. Nouvel utilisateur.
-                \r3. Supprimer un utilisateur.
-                
-                \r0. Quitter.
-                """
-        )
-
-        choice = self.ask("Votre choix: ")
+        choice = ""
         while not choice.isdigit() and choice not in ["0", "1", "2", "3"]:
+            colorama.ansi.clear_screen()
+            print(Style.BRIGHT + "PASSMAN - PASSword MANager".center(100, "#"))  # type: ignore
+
+            print(
+                """
+                    \r1. Connexion.
+                    \r2. Nouvel utilisateur.
+                    \r3. Supprimer un utilisateur.
+                    
+                    \r0. Quitter.
+                    """
+            )
+
+            choice = self.ask("Votre choix: ")
+
             match int(choice):
                 case 0:
                     self.controller.exit()
@@ -95,31 +93,13 @@ class Tui:
                     self.remove_user()
                 case _:
                     self.show_error("Choix invalide. Veuillez réessayer.")
-            choice = self.ask("Votre choix: ")
 
     def show_vault_menu(self) -> None:
         """
         Show vault menu
 
-        Returns:
-            A number between 0 and 6
         """
-        colorama.ansi.clear_screen()
-        print(Style.BRIGHT + "Votre coffre-fort".center(100, "#"))  # type: ignore
-
-        print(
-            """
-            \r1. Voir les éléments.
-            \r2. Voir les détails d’un élément.
-            \r3. Ajouter un élément.
-            \r4. Modifier un élément.
-            \r5. Supprimer un élément.
-            \r6. Rechercher un élément par son nom.
-            
-            \r0. Fermer le coffre-fort.
-        """
-        )
-        choice = self.ask("Votre choix: ")
+        choice = ""
         while not choice.isdigit() and choice not in [
             "0",
             "1",
@@ -129,6 +109,23 @@ class Tui:
             "5",
             "6",
         ]:
+            colorama.ansi.clear_screen()
+            print(Style.BRIGHT + "Votre coffre-fort".center(100, "#"))  # type: ignore
+
+            print(
+                """
+                \r1. Voir les éléments.
+                \r2. Voir les détails d’un élément.
+                \r3. Ajouter un élément.
+                \r4. Modifier un élément.
+                \r5. Supprimer un élément.
+                \r6. Rechercher un élément par son nom.
+                
+                \r0. Fermer le coffre-fort.
+            """
+            )
+            choice = self.ask("Votre choix: ")
+
             match int(choice):
                 case 0:
                     return
@@ -146,7 +143,6 @@ class Tui:
                     self.search_by_name()
                 case _:
                     self.show_error("Choix invalide. Veuillez réessayer.")
-            choice = self.ask("Votre choix: ")
 
     @staticmethod
     def ask(prompt: str, default: str = "") -> str:
@@ -199,7 +195,7 @@ class Tui:
         _summary_
         """
         element_name = self.ask("Entrez le nom d’un élément: ")
-        _,login,password = self.controller.show_details(element_name)
+        _, login, password = self.controller.show_details(element_name)
         self.show_message(f"Login: {login}, mot de passe: {password}")
 
     def add_element(self) -> None:

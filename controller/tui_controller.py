@@ -4,58 +4,17 @@ TUI controller
 from __future__ import annotations
 from model.data import DuplicateError, Vault, VaultItem, UserStorage
 
-# from view.tui import Tui
-import view.tui as tui
+from view.tui import Tui
 
 
 class TuiController:
     """
     TUI Controller
     """
-
-    _view: tui.Tui
-    _storage: UserStorage
-    vault: Vault
-
-    @property
-    def view(self) -> tui.Tui:
-        """
-        Get view
-
-        Returns:
-            User Interface
-        """
-        return self._view
-
-    @view.setter
-    def view(self, view: tui.Tui) -> None:
-        """
-        Set view
-
-        Arguments:
-            view -- User Interface
-        """
-        self._view = view
-
-    @property
-    def storage(self) -> UserStorage:
-        """
-        Get storage
-
-        Returns:
-            User storage
-        """
-        return self._storage
-
-    @storage.setter
-    def storage(self, storage: UserStorage) -> None:
-        """
-        Set storage
-
-        Arguments:
-            storage -- User storage
-        """
-        self._storage = storage
+    def __init__(self,view:Tui,storage:UserStorage):
+        self.view = view
+        self.storage = storage
+        self.vault = Vault()
 
     def start(self) -> None:
         """

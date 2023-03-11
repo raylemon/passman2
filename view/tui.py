@@ -13,7 +13,7 @@ class Tui:
     Terminal User Interface
     """
 
-    _controller: ctrl.TuiController
+    __controller: ctrl.TuiController
 
     def __init__(self) -> None:
         """
@@ -29,7 +29,11 @@ class Tui:
         Returns:
             Tui Controller
         """
-        return self._controller
+        try:
+            return self.__controller
+        except AttributeError:
+            self.show_error("Contrôleur non assigné")
+            exit(-1)
 
     @controller.setter
     def controller(self, value: ctrl.TuiController) -> None:
@@ -39,7 +43,7 @@ class Tui:
         Arguments:
             value -- Controller
         """
-        self._controller = value
+        self.__controller = value
 
     @staticmethod
     def show_message(message: str) -> None:
@@ -65,8 +69,8 @@ class Tui:
         """
         Show main menu
         """
-        choice = ""
-        while not choice.isdigit() and choice not in ["0", "1", "2", "3"]:
+
+        while (choice := "") != "0":
             colorama.ansi.clear_screen()
             print(Style.BRIGHT + "PASSMAN - PASSword MANager".center(100, "#"))  # type: ignore
 
@@ -79,20 +83,20 @@ class Tui:
                     \r0. Quitter.
                     """
             )
+            while not choice.isdigit() and choice not in ["0", "1", "2", "3"]:
+                choice = self.ask("Votre choix: ")
 
-            choice = self.ask("Votre choix: ")
-
-            match int(choice):
-                case 0:
-                    self.controller.exit()
-                case 1:
-                    self.login()
-                case 2:
-                    self.create_user()
-                case 3:
-                    self.remove_user()
-                case _:
-                    self.show_error("Choix invalide. Veuillez réessayer.")
+                match int(choice):
+                    case 0:
+                        self.controller.exit()
+                    case 1:
+                        self.login()
+                    case 2:
+                        self.create_user()
+                    case 3:
+                        self.remove_user()
+                    case _:
+                        self.show_error("Choix invalide. Veuillez réessayer.")
 
     def show_vault_menu(self) -> None:
         """
@@ -100,15 +104,7 @@ class Tui:
 
         """
         choice = ""
-        while not choice.isdigit() and choice not in [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-        ]:
+        while choice != "0":
             colorama.ansi.clear_screen()
             print(Style.BRIGHT + "Votre coffre-fort".center(100, "#"))  # type: ignore
 
@@ -125,24 +121,32 @@ class Tui:
             """
             )
             choice = self.ask("Votre choix: ")
-
-            match int(choice):
-                case 0:
-                    return
-                case 1:
-                    self.list_elements()
-                case 2:
-                    self.show_details()
-                case 3:
-                    self.add_element()
-                case 4:
-                    self.edit_element()
-                case 5:
-                    self.remove_element()
-                case 6:
-                    self.search_by_name()
-                case _:
-                    self.show_error("Choix invalide. Veuillez réessayer.")
+            while not choice.isdigit() and choice not in [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+            ]:
+                match int(choice):
+                    case 0:
+                        return
+                    case 1:
+                        self.list_elements()
+                    case 2:
+                        self.show_details()
+                    case 3:
+                        self.add_element()
+                    case 4:
+                        self.edit_element()
+                    case 5:
+                        self.remove_element()
+                    case 6:
+                        self.search_by_name()
+                    case _:
+                        self.show_error("Choix invalide. Veuillez réessayer.")
 
     @staticmethod
     def ask(prompt: str, default: str = "") -> str:
